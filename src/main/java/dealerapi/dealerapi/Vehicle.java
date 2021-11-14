@@ -77,7 +77,9 @@ public class Vehicle implements Serializable {
         this.id = id;
     }
 
-    public Vehicle(){}
+    public Vehicle(){
+        id = -1;
+    }
 
     /**
      * Getter for make
@@ -211,14 +213,14 @@ public class Vehicle implements Serializable {
      */
     @Override
     public String toString(){
-        return "{\n" +
-                "    \"id\": \"" + id + "\",\n" +
-                "    \"make\": \"" + make + "\",\n" +
-                "    \"model\": \"" + model + "\",\n" +
-                "    \"year\": \"" + year + "\",\n" +
-                "    \"isFourWheel\": \"" + isFourWheel + "\",\n" +
-                "    \"price\": \"" + price + "\",\n" +
-                "    \"mpg\": \"" + mpg + "\"\n" +
+        return "{" +
+                "\"id\": \"" + id + "\", " +
+                "\"make\": \"" + make + "\", " +
+                "\"model\": \"" + model + "\", " +
+                "\"year\": \"" + year + "\", " +
+                "\"isFourWheel\": \"" + isFourWheel + "\", " +
+                "\"price\": \"" + price + "\", " +
+                "\"mpg\": \"" + mpg + "\"" +
                 "}";
     }
 }

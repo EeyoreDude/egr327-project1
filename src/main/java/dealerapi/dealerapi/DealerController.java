@@ -1,8 +1,14 @@
 package dealerapi.dealerapi;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.rmi.NoSuchObjectException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class DealerController {
@@ -28,21 +34,57 @@ public class DealerController {
                     return currentVehicle;
                 }
         }
-        return null;
+        throw new NoSuchObjectException("No vehicle with id " + id);
     }
 
-    @RequestMapping(value = "/updateVehicle", method = RequestMethod.GET)
+    @RequestMapping(value = "/updateVehicle", method = RequestMethod.PUT)
     public Vehicle updateVehicle(@RequestBody Vehicle newVehicle) throws IOException{
-        for(int i = 0; i < dealer.getList().size(); i++){
-            if(dealer.getList().get(i).getId()==newVehicle.getId()){
-                dealer.getList().set(i, newVehicle);
+        if(newVehicle.getId() == -1){
+            throw new IllegalArgumentException("Please provide an ID");
+        }
+
+        for(Vehicle currentVehicle : dealer.getList()){
+            if(currentVehicle.getId() == newVehicle.getId()){
+                dealer.getList().set(currentVehicle.getId(), newVehicle);
                 dealer.generateReport();
                 return newVehicle;
-            } else{
-                System.out.println("No Vehicle With Matching ID Found");
             }
         }
-        return null;
+
+        throw new NoSuchObjectException("No vehicle with id " + newVehicle.getId());
+    }
+
+    @RequestMapping(value = "/deleteVehicle/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteVehicle(@PathVariable("id") int id) throws IOException{
+        for(Vehicle currentVehicle : dealer.getList()){
+            if(currentVehicle.getId() == id){
+                dealer.getList().remove(currentVehicle);
+                dealer.generateReport();
+                return new ResponseEntity<>("Successfully removed vehicle with id " + id, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>("No vehicle with id " + id, HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/getLatestVehicles", method = RequestMethod.GET)
+    public List<Vehicle> getLatestVehicles() throws IOException{
+        int i = dealer.getList().size() - 10;
+        if(i < 0){
+            i = 0;
+        }
+        ArrayList<Vehicle> latestVehicles = new ArrayList<>();
+        for(; i < dealer.getList().size(); i++){
+
+            latestVehicles.add(dealer.getList().get(i));
+            try {
+                dealer.getList().get(i + 1);
+            }
+            catch (IndexOutOfBoundsException e){
+                return latestVehicles;
+            }
+
+        }
+        return latestVehicles;
     }
 
 

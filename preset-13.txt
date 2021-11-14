@@ -1,0 +1,13 @@
+Ford F150,2015,35000,TRUE
+Ford Focus,2010,15000,
+Ford Fiesta,2012,18000,
+Ford Fusion,2015,20000,
+Ford Mustang,1999,8000,
+Ford GT,2017,30000,
+Ford Taurus,2015,25000,
+GM Sierra,2016,40000,TRUE
+Chevy Silverado,2016,35000,TRUE
+Mercedes-Benz S600,2005,192000,
+Subaru Impreza,2009,19000,
+Polaris Ranger,2012,11000,TRUE
+Ski-Doo Expedition,2014,12900,TRUE
