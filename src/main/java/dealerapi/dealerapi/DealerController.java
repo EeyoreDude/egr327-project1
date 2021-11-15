@@ -68,7 +68,7 @@ public class DealerController {
 
     @RequestMapping(value = "/getLatestVehicles", method = RequestMethod.GET)
     public List<Vehicle> getLatestVehicles() throws IOException{
-        int i = Math.min(dealer.getList().size() - 10, 0);
+        int i = Math.max(dealer.getList().size() - 10, 0);
         ArrayList<Vehicle> latestVehicles = new ArrayList<>();
         for(; i < dealer.getList().size(); i++){
             latestVehicles.add(dealer.getList().get(i));
