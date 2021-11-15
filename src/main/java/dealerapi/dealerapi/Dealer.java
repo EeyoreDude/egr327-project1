@@ -1,14 +1,18 @@
 package dealerapi.dealerapi;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.SerializationUtils;
 
+import java.util.Scanner;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static java.lang.Integer.max;
 import static java.lang.Integer.parseInt;
 
 public class Dealer implements Serializable {
@@ -28,23 +32,31 @@ public class Dealer implements Serializable {
     public ArrayList<Vehicle> getList(){ return inventory.getInventoryList(); }
 
     public int getLastID(){
-        return getList().get(getList().size() - 1).getId();
+        int maxID = 0;
+        for(Vehicle currentVehicle : getList()){
+            if(currentVehicle.getId() > maxID){
+                maxID = currentVehicle.getId();
+            }
+        }
+        return maxID;
     }
 
     /**
      * The constructor for the Dealer class
-     * @param fileURL - the url of the file to load into the Dealer
+     * @param fileString - the location of the file to load into the Dealer
      * @throws IOException - thrown if the file does not exist
      */
-    public Dealer(String fileURL) throws IOException {
+    public Dealer(String fileString) throws IOException {
 
        // "https://raw.githubusercontent.com/kyungsooim/TestData/master/data/SeptemberInventory.txt"
 
-        inventory = readInventoryFromWeb(fileURL);
+        inventory = readInventoryFromFile(fileString);
         generateReport();
     }
 
-    public Dealer(){}
+    public Dealer(){
+        inventory = new Inventory(new ArrayList<Vehicle>());
+    }
 
     /**
      * A helper function for the constructor, reads a given file url and inputs the data into an Inventory object
@@ -79,6 +91,18 @@ public class Dealer implements Serializable {
         }
 
         return  new Inventory(inventoryList);
+    }
+
+    private Inventory readInventoryFromFile(String fileName) throws IOException {
+        ArrayList<Vehicle> inventoryList = new ArrayList<>();
+        File file = new File(fileName);
+        Scanner input = new Scanner(file);
+        while(input.hasNextLine()){
+            ObjectMapper mapper = new ObjectMapper();
+            String currentLine = input.nextLine();
+            inventoryList.add(mapper.readValue(currentLine, Vehicle.class));
+        }
+        return new Inventory(inventoryList);
     }
 
     /**

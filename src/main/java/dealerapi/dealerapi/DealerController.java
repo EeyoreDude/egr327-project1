@@ -4,7 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.FileNotFoundException;
+
+
 import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
@@ -14,14 +15,12 @@ import java.util.List;
 public class DealerController {
     public DealerController() throws IOException {}
 
-    public Dealer dealer = new Dealer("https://raw.githubusercontent.com/EeyoreDude/egr327-project1/main/preset-13.txt");
-    private static int id = 0;
+    public Dealer dealer = new Dealer("report.txt");
 
 
     @RequestMapping(value = "/addVehicle", method = RequestMethod.POST)
     public Vehicle addVehicle(@RequestBody Vehicle newVehicle) throws IOException{
-        id = dealer.getLastID() + 1;
-        newVehicle.setId(id++);
+        newVehicle.setId(dealer.getLastID() + 1);
         dealer.getInventory().add(new Vehicle(newVehicle));
         dealer.generateReport();
         return newVehicle;
@@ -67,10 +66,9 @@ public class DealerController {
     }
 
     @RequestMapping(value = "/getLatestVehicles", method = RequestMethod.GET)
-    public List<Vehicle> getLatestVehicles() throws IOException{
-        int i = Math.max(dealer.getList().size() - 10, 0);
+    public List<Vehicle> getLatestVehicles() {
         ArrayList<Vehicle> latestVehicles = new ArrayList<>();
-        for(; i < dealer.getList().size(); i++){
+        for(int i = Math.max(dealer.getList().size() - 10, 0); i < dealer.getList().size(); i++){
             latestVehicles.add(dealer.getList().get(i));
         }
         return latestVehicles;

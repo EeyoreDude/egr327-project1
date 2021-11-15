@@ -34,7 +34,7 @@ public class Vehicle implements Serializable {
         this.isFourWheel = isFourWheel;
         this.price = price;
         this.mpg = mpg;
-        this.id = -1;
+        this.id = 0;
     }
 
     /**
@@ -78,7 +78,7 @@ public class Vehicle implements Serializable {
     }
 
     public Vehicle(){
-        id = -1;
+        id = 0;
     }
 
     /**
