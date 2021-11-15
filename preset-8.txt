@@ -1,0 +1,8 @@
+Ford F150,2015,35000,TRUE
+Ford Focus,2010,15000,
+Ford Fiesta,2012,18000,
+Ford Fusion,2015,20000,
+Ford Mustang,1999,8000,
+Ford GT,2017,30000,
+Ford Taurus,2015,25000,
+GM Sierra,2016,40000,TRUE

@@ -7,3 +7,7 @@
 {"id": "6", "make": "Ford", "model": "Taurus", "year": "2015", "isFourWheel": "false", "price": "25000", "mpg": "0"}
 {"id": "7", "make": "GM", "model": "Sierra", "year": "2016", "isFourWheel": "true", "price": "40000", "mpg": "0"}
 {"id": "8", "make": "Chevy", "model": "Silverado", "year": "2016", "isFourWheel": "true", "price": "35000", "mpg": "0"}
+{"id": "9", "make": "Mercedes-Benz", "model": "S600", "year": "2005", "isFourWheel": "false", "price": "192000", "mpg": "0"}
+{"id": "10", "make": "Subaru", "model": "Impreza", "year": "2009", "isFourWheel": "false", "price": "19000", "mpg": "0"}
+{"id": "11", "make": "Polaris", "model": "Ranger", "year": "2012", "isFourWheel": "true", "price": "11000", "mpg": "0"}
+{"id": "12", "make": "Ski-Doo", "model": "Expedition", "year": "2014", "isFourWheel": "true", "price": "12900", "mpg": "0"}

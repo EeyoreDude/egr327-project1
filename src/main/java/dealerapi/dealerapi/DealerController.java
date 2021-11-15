@@ -14,7 +14,7 @@ import java.util.List;
 public class DealerController {
     public DealerController() throws IOException {}
 
-    public Dealer dealer = new Dealer("https://raw.githubusercontent.com/kyungsooim/TestData/master/data/SeptemberInventory.txt");
+    public Dealer dealer = new Dealer("https://raw.githubusercontent.com/EeyoreDude/egr327-project1/main/preset-13.txt");
     private static int id = 0;
 
 
@@ -68,21 +68,10 @@ public class DealerController {
 
     @RequestMapping(value = "/getLatestVehicles", method = RequestMethod.GET)
     public List<Vehicle> getLatestVehicles() throws IOException{
-        int i = dealer.getList().size() - 10;
-        if(i < 0){
-            i = 0;
-        }
+        int i = Math.min(dealer.getList().size() - 10, 0);
         ArrayList<Vehicle> latestVehicles = new ArrayList<>();
         for(; i < dealer.getList().size(); i++){
-
             latestVehicles.add(dealer.getList().get(i));
-            try {
-                dealer.getList().get(i + 1);
-            }
-            catch (IndexOutOfBoundsException e){
-                return latestVehicles;
-            }
-
         }
         return latestVehicles;
     }
