@@ -31,6 +31,14 @@ public class Dealer implements Serializable {
 
     public ArrayList<Vehicle> getList(){ return inventory.getInventoryList(); }
 
+    public void testInventoryIds(){
+        ArrayList<Integer> ids = new ArrayList<>();
+        for(Vehicle currentVehicle : getList()){
+            ids.add(currentVehicle.getId());
+        }
+        System.out.println(ids);
+    }
+
     public int getLastID(){
         int maxID = 0;
         for(Vehicle currentVehicle : getList()){

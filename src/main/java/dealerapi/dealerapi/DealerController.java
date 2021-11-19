@@ -1,9 +1,11 @@
 package dealerapi.dealerapi;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.client.RestTemplate;
 
 
 import java.io.IOException;
@@ -16,11 +18,12 @@ public class DealerController {
     public DealerController() throws IOException {}
 
     public Dealer dealer = new Dealer("report.txt");
+    public int globalId = dealer.getLastID() + 1;
 
 
     @RequestMapping(value = "/addVehicle", method = RequestMethod.POST)
     public Vehicle addVehicle(@RequestBody Vehicle newVehicle) throws IOException{
-        newVehicle.setId(dealer.getLastID() + 1);
+        newVehicle.setId(globalId++);
         dealer.getInventory().add(new Vehicle(newVehicle));
         dealer.generateReport();
         return newVehicle;
@@ -38,7 +41,7 @@ public class DealerController {
 
     @RequestMapping(value = "/updateVehicle", method = RequestMethod.PUT)
     public Vehicle updateVehicle(@RequestBody Vehicle newVehicle) throws IOException{
-        if(newVehicle.getId() == -1){
+        if(newVehicle.getId() < 0){
             throw new IllegalArgumentException("Please provide an ID");
         }
 
@@ -72,6 +75,46 @@ public class DealerController {
             latestVehicles.add(dealer.getList().get(i));
         }
         return latestVehicles;
+    }
+
+
+    RestTemplate restTemplate = new RestTemplate();
+
+    @Scheduled(fixedRate = 3000)
+    public void addVehicle(){
+        String make = RandomStringUtils.randomAlphabetic(10);
+        String model = RandomStringUtils.randomAlphabetic(10);
+        int year = (int) (Math.random() * (2016 - 1986 + 1) + 1985);
+        int price = (int) (Math.random() * (45000 - 15000 + 1) + 15000);
+        boolean isFourWheel = Math.round(Math.random()) == 1;
+        int mpg = (int) (Math.random() * (25 - 12 + 1) + 12);
+
+        restTemplate.postForObject("http://localhost:8080/addVehicle", new Vehicle(make, model, year, isFourWheel, price, mpg), Vehicle.class);
+
+        int thisId = globalId - 1;
+        System.out.println("Added:\t" + thisId);
+    }
+
+    @Scheduled(fixedRate = 1500)
+    public void deleteVehicle(){
+        int randomID = (int) (Math.random() * (globalId - 1) + 1);
+        restTemplate.delete("http://localhost:8080/deleteVehicle/" + randomID);
+        System.out.println("Deleted:\t" + randomID);
+    }
+
+    @Scheduled(fixedRate  = 1000)
+    public void updateVehicle(){
+        int randomID = (int) (Math.random() * (globalId - 1) + 1);
+        Vehicle randomVehicle = new Vehicle(randomID, "Cool", "Car", 2001, true, 20, 100);
+        randomVehicle.setModel("REFURBISHED");
+
+        restTemplate.put("http://localhost:8080/updateVehicle", randomVehicle);
+        System.out.println("Updated:\t" + randomID);
+    }
+
+    @Scheduled(fixedRate = 500)
+    public void testForDuplicate(){
+        dealer.testInventoryIds();
     }
 
 
